@@ -14,7 +14,9 @@ lint-commit-message() {
 }
 
 lint() {
-  lint-commit-message "$1" 
+  if ! lint-commit-message "$1" ; then
+    return 1
+  fi
 
   local repo=$(git-dir)/.git
   local hooks=$(hooks-dir)/.git
@@ -23,6 +25,8 @@ lint() {
     local hook="${repo}/hooks/$(basename "${0}")"
     exec $hook
   fi
+
+  return 0
 }
 
 lint "$1"
