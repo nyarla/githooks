@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+git-dir() {
+  git rev-parse --show-superproject-working-tree --show-toplevel | head -1
+}
+
+hooks-dir() {
+  echo "$(cd "$(dirname "${0}")/../" && pwd)"
+}
+
+lint-commit-message() {
+  local NODE_PATH=$(cd "$(dirname "${0}")/../node_modules")
+  npx --no-install -- commitlint --config "$(hooks-dir)/commitlintrc.json" --edit "$1" 
+}
+
+lint() {
+  lint-commit-message "$1" 
+}
+
+lint "$1"
