@@ -10,7 +10,7 @@ hooks-dir() {
 
 lint-commit-message() {
   local NODE_PATH=$(cd "$(dirname "${0}")/../node_modules")
-  npx --no-install -- commitlint --config "$(hooks-dir)/commitlintrc.json" --edit "$1" 
+  npx --no-install -- commitlint --config "$(hooks-dir)/.commitlintrc.json" --edit "$1" 
 }
 
 lint() {
