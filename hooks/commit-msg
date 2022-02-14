@@ -13,7 +13,7 @@ src-dir() {
 lint-commit-message() {
   export NODE_PATH="$(src-dir)/node_modules"
   $NODE_PATH/.bin/commitlint --config "$(src-dir)/.commitlintrc.json" --edit "$1"
-  $NODE_PATH/.bin/textlint --config "$(src-dir)/.textlintrc.yaml" "$1"
+  cat $1 | $NODE_PATH/.bin/textlint --config "$(src-dir)/.textlintrc.yaml" --stdin
 }
 
 lint() {
