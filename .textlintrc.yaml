@@ -1,5 +1,7 @@
 rules:
   rousseau:
+    ignoreTypes:
+      - sentence:uppercase
     showLevels:
       - suggestion
       - warning
@@ -16,4 +18,11 @@ rules:
   en-spell: true,
   unexpanded-acronym:
     - min_acronym_len: 3
-  write-good: {}
+  write-good:
+    passive: true
+    illusion: true
+    so: true
+    thereIs: true
+    weasel: true
+    tooWordy: true
+    cliches: true
