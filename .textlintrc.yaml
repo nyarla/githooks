@@ -16,8 +16,6 @@ rules:
       - Blockquote
   en-capitalization: true,
   en-spell: true,
-  unexpanded-acronym:
-    - min_acronym_len: 3
   write-good:
     passive: true
     illusion: true
