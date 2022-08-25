@@ -20,6 +20,11 @@ is-protected() {
 protected-branch() {
   local branch=$(git rev-parse --abbrev-ref HEAD)
 
+  case "$1" in
+    /etc/nixos | $HOME/local/dot* ) exit 0 ;;
+    $HOME/local/githooks | $HOME/local/textlintrc ) exit 0 ;;
+  esac
+
   if test $(is-protected "${branch}") -eq 1 ; then
     echo this branch is protected
     exit 1
