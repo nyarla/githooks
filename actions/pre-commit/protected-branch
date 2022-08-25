@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+actions() {
+  echo "$(cd "$(dirname "${0}")/../../" && pwd)"
+}
+
+is-protected() {
+  local name=$(git rev-parse --abbrev-ref HEAD)
+
+  case "${name}" in
+    devel | main | master )
+      echo 1 ;;
+    *)
+      echo 0 ;;
+  esac
+}
+
+protected-branch() {
+  local branch=$(git rev-parse --abbrev-ref HEAD)
+
+  if test $(is-protected "${branch}") -eq 1 ; then
+    echo this branch is protected
+    exit 1
+  fi
+}
+
+protected-branch "${1}" "${2}"

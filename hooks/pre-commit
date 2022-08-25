@@ -2,40 +2,34 @@
 
 set -euo pipefail
 
-dest-dir() {
-  git rev-parse --show-superproject-working-tree --show-toplevel | head -1
-}
-
-src-dir() {
+hooks() {
   echo "$(cd "$(dirname "${0}")/../" && pwd)"
 }
 
-lint-secret() {
-  export NODE_PATH="$(src-dir)/node_modules"
-  
-  if test -e "$(dest-dir)/.secretlintrc.json" ; then
-    $NODE_PATH/.bin/secretlint --secretlintrc=$(src-dir)/.secretlintrc.json '**/*'
-    $NODE_PATH/.bin/secretlint --secretlintrc=$(dest-dir)/.secretlintrc.json '**/*'
-  fi
+actions() {
+  echo "$(hooks)/actions"
 }
 
-lint() {
-  if ! lint-secret ; then
-    return 1
-  fi
+repository() {
+  git rev-parse --show-superproject-working-tree --show-toplevel | head -1
+}
 
-  local repo=$(dest-dir)/.git
-  local hooks=$(src-dir)/.git
+pre-commit() {
+  local actions="$(actions)"
+  local repo="$(repository)"
 
-  if test "${repo}" != "${hooks}" ; then
-    local hook="${repo}/hooks/$(basename "${0}")"
+  for action in $(ls "${actions}/pre-commit"); do
+    bash "${actions}/pre-commit/${action}" "${repo}" "${actions%*/*}" || exit 1
+  done
 
-    if test -x "${hook}"; then
+  if test "$(repository)/.git" != "$(repository)/.git" ; then
+    local hook="$(repository)/hooks/$(basename "${0}")"
+    if test -x "${hook}" ; then
       exec $hook
     fi
   fi
 
-  return 0
+  exit 0
 }
 
-lint
+pre-commit
