@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+actions() {
+  echo "$(cd "$(dirname "${0}")/../../" && pwd)"
+}
+
+textlintrc() { 
+  case "$1" in
+    /home/nyarla/**   ) echo .textlintrc.yaml.en ;;
+    /Users/nyarla/**  ) echo .textlintrc.yaml.ja ;;
+  esac
+}
+
+lint-commit-message() {
+  local actions="$(actions)"
+  local textlintrc="$(textlintrc "$1")"
+
+  export NODE_PATH="${actions}/node_modules"
+  $NODE_PATH/.bin/commitlint --config "${actions}/.commitlintrc.json" --edit "$1" || exit 1
+  cat "$1" | $NODE_PATH/.bin/textlint --config "${actions}/${textlintrc}" --stdin || exit 1
+}
+
+lint-commit-message "$1" && exit 0

@@ -2,36 +2,34 @@
 
 set -euo pipefail
 
-dest-dir() {
-  git rev-parse --show-superproject-working-tree --show-toplevel | head -1
-}
-
-src-dir() {
+hooks() {
   echo "$(cd "$(dirname "${0}")/../" && pwd)"
 }
 
-lint-commit-message() {
-  export NODE_PATH="$(src-dir)/node_modules"
-  $NODE_PATH/.bin/commitlint --config "$(src-dir)/.commitlintrc.json" --edit "$1" || exit 1
-  cat $1 | $NODE_PATH/.bin/textlint --config "$(src-dir)/.textlintrc.yaml" --stdin
+actions() {
+  echo "$(hooks)/actions"
 }
 
-lint() {
-  if ! lint-commit-message "$1" ; then
-    return 1
-  fi
+repository() {
+  git rev-parse --show-superproject-working-tree --show-toplevel | head -1
+}
 
-  local repo=$(dest-dir)/.git
-  local hooks=$(src-dir)/.git
+commit-msg() {
+  local actions="$(actions)"
+  local repo="$(repository)"
 
-  if test "${repo}" != "${hooks}" ; then
-    local hook="${repo}/hooks/$(basename "${0}")"
-    if test -x "${hook}"; then
+  for action in $(ls "${actions}/commit-msg"); do
+    bash "${actions}/commit-msg/${action}" "${repo}/${1}" || exit 1
+  done
+
+  if test "$(repository)/.git" != "$(repository)/.git" ; then
+    local hook="$(repository)/hooks/$(basename "${0}")"
+    if test -x "${hook}" ; then
       exec $hook
     fi
   fi
 
-  return 0
+  exit 0
 }
 
-lint "$1"
+commit-msg "$1"
