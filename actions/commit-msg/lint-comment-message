@@ -6,11 +6,14 @@ actions() {
   echo "$(cd "$(dirname "${0}")/../../" && pwd)"
 }
 
-textlintrc() { 
-  case "$1" in
-    /home/nyarla/**   ) echo .textlintrc.yaml.en ;;
-    /Users/nyarla/**  ) echo .textlintrc.yaml.ja ;;
-  esac
+textlintrc() {
+  local dotgit="$(dirname "$1")";
+
+  if test -e "${dotgit}/.locale"; then
+    echo .textlintrc.yaml."$(cat "${dotgit}/.locale")";
+  else
+    echo .textlintrc.yaml.en
+  fi
 }
 
 lint-commit-message() {
