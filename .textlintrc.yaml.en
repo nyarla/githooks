@@ -1,6 +1,8 @@
 rules:
   rousseau:
     ignoreTypes:
+      - sentence:start
+      - sentence:end
       - sentence:uppercase
     showLevels:
       - suggestion
