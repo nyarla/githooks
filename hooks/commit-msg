@@ -19,11 +19,11 @@ commit-msg() {
   local repo="$(repository)"
 
   for action in $(ls "${actions}/commit-msg"); do
-    bash "${actions}/commit-msg/${action}" "${repo}/${1}" || exit 1
+    bash "${actions}/commit-msg/${action}" "${1}" || exit 1
   done
 
-  if test "$(repository)/.git" != "$(repository)/.git" ; then
-    local hook="$(repository)/hooks/$(basename "${0}")"
+  if test "${repo}/.git" != "${repo}/.git" ; then
+    local hook="${repo}/hooks/$(basename "${0}")"
     if test -x "${hook}" ; then
       exec $hook
     fi
