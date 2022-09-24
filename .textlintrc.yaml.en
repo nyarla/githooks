@@ -4,6 +4,7 @@ rules:
       - sentence:start
       - sentence:end
       - sentence:uppercase
+      - weasel
     showLevels:
       - suggestion
       - warning
@@ -23,6 +24,6 @@ rules:
     illusion: true
     so: true
     thereIs: true
-    weasel: true
+    weasel: false
     tooWordy: true
     cliches: true
