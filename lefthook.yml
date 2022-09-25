@@ -1,0 +1,17 @@
+commit-msg:
+  parallel: true
+  scripts:
+    "commit-message-lint":
+      runner: bash
+
+post-commit:
+  parallel: true
+  commands:
+    "rbw-is-locked":
+      run: "rbw unlocked || echo -e '\e[41m\e[30mbitwarden is locked. please unlock by rbw unlock` before git push\e[0m'"
+
+pre-commit:
+  parallel: true
+  scripts:
+    "protect-branch":
+      runner: bash
