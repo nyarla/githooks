@@ -3,13 +3,13 @@
 set -euo pipefail
 
 textlintrc() {
-
   for file in .textlintrc .textlintrc.yaml .textlintrc.yml .textlintrc.json ; do
-    if test -e .git/locale && test -e "$file.$(cat .git/locale)"; then
-      echo "$file.$(cat .git/locale)"
+    local fp=$HOME/local/githooks/$file
+    if test -e .git/locale && test -e "$fp.$(cat .git/locale)"; then
+      echo "$fp.$(cat .git/locale)"
       return 0
-    elif test -e $file ; then
-      echo $file
+    elif test -e $fp ; then
+      echo $fp
       return 0
     fi
   done
@@ -19,7 +19,7 @@ textlintrc() {
 }
 
 githooks() {
-  echo "$(cd "$(dirname "${0}")/../../" && pwd)"
+  echo $HOME/local/githooks
   return 0
 }
 
