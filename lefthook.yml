@@ -6,9 +6,9 @@ commit-msg:
 
 post-commit:
   parallel: true
-  commands:
-    "rbw-is-locked":
-      run: "rbw unlocked || echo -e '\e[41m\e[30mbitwarden is locked. please unlock by rbw unlock` before git push\e[0m'"
+  scripts:
+    "rbw-unlock-warning":
+      runner: bash
 
 pre-commit:
   parallel: true
