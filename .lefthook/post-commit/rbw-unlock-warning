@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if type rbw >/dev/null 2>&1 ; then
+  if ! rbw unlocked >/dev/null 2>&1 ; then
+    echo -en "\e[41m\e[30m"
+    echo -n 'bitwarden is locked. please unlock by rbw before git push'
+    echo -e  "\e[0m"
+  fi
+fi
+
+exit 0
