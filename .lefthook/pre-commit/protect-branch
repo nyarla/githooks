@@ -4,6 +4,10 @@ if test -e .git/.unlocked-branch ; then
   exit 0
 fi
 
+if test -e .git-unlocked-branch ; then
+  exit 0
+fi
+
 case "$(git rev-parse --abbrev-ref HEAD)" in
   main | master | devel )
     echo "this branch protected";
